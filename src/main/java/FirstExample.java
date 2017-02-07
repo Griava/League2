@@ -1,72 +1,43 @@
 package FirstExample;
 
 
-import java.sql.*;
+import java.util.Scanner;
+
+import Champion.Champion;
+import Requete.Requete;
 
 public class FirstExample {
-    // JDBC driver name and database URL
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/badminton";
 
-    //  Database credentials
-    static final String USER = "root";
-    static final String PASS = "root";
 
-    public static void main(String[] args) {
-        Connection conn = null;
-        Statement stmt = null;
-        try{
-            //STEP 2: Register JDBC driver
-            Class.forName("com.mysql.jdbc.Driver");
+    public static void main(String[] args) throws Exception {
+        Champion c = new Champion();
+        int choix ;
 
-            //STEP 3: Open a connection
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+        Requete r = new Requete();
 
-            //STEP 4: Execute a query
-            System.out.println("Creating statement...");
-            stmt = conn.createStatement();
-            String sql;
-            sql = "SELECT id, name, surname FROM user";
-            ResultSet rs = stmt.executeQuery(sql);
 
-            //STEP 5: Extract data from result set
-            while(rs.next()){
-                //Retrieve by column name
-                int id  = rs.getInt("id");
-                String surname = rs.getString("surname");
-                String name = rs.getString("name");
+        do{
+            System.out.println("\n\n---MENU---");
+            System.out.println("1. Quitter");
+            System.out.println("2. Champion");
 
-                //Display values
-                System.out.print("ID: " + id);
-                System.out.print(", Age: " + surname);
-                System.out.print(", First: " + name);
+            choix = new Scanner(System.in).nextInt();
+
+            switch(choix){
+                case 1:
+                    System.out.println(c);
+                    break;
+                case 2:
+                    r.StatsRyze();
+                    System.out.println("\n");
+                    System.out.println(r);
+
 
             }
-            //STEP 6: Clean-up environment
-            rs.close();
-            stmt.close();
-            conn.close();
-        }catch(SQLException se){
-            //Handle errors for JDBC
-            se.printStackTrace();
-        }catch(Exception e){
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }finally{
-            //finally block used to close resources
-            try{
-                if(stmt!=null)
-                    stmt.close();
-            }catch(SQLException se2){
-            }// nothing we can do
-            try{
-                if(conn!=null)
-                    conn.close();
-            }catch(SQLException se){
-                se.printStackTrace();
-            }//end finally try
-        }//end try
-        System.out.println("Goodbye!");
-    }//end main
+        } while(choix != 0);
+        r.fermerConnexion();
+
+
+    }
+
 }//end FirstExample
